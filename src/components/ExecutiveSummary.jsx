@@ -9,7 +9,7 @@ const SEV_TONE = {
   2: 'text-drift',
 }
 
-export default function ExecutiveSummary({ results, overall }) {
+export default function ExecutiveSummary({ results, overall, repCount }) {
   const total = results.length
   const passing = results.filter((r) => !r.detected).length
   const fired = results
@@ -79,7 +79,7 @@ export default function ExecutiveSummary({ results, overall }) {
       <p className="mt-4 border-t border-edge pt-3 text-xs text-muted">
         Directional. Detection is deterministic.{' '}
         {overall ? 'Interpretation is LLM-generated. ' : ''}
-        {results.length} checks · current period.
+        {results.length} checks · {repCount} reps · current period.
       </p>
     </section>
   )

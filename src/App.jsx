@@ -4,11 +4,13 @@ import Tabs from './components/Tabs.jsx'
 import SetupTab from './components/SetupTab.jsx'
 import HealthCheckTab from './components/HealthCheckTab.jsx'
 import EvalTab from './components/EvalTab.jsx'
+import HowItWorksTab from './components/HowItWorksTab.jsx'
 
 const TABS = [
   { id: 'setup', label: 'Setup' },
   { id: 'health', label: 'Health Check' },
   { id: 'eval', label: 'Eval' },
+  { id: 'howitworks', label: 'How This Works' },
 ]
 
 export default function App() {
@@ -28,7 +30,7 @@ export default function App() {
               </p>
             </div>
             <span className="rounded-full border border-edge px-3 py-1 text-xs text-muted">
-              Phase 2 · interpretation
+              prototype
             </span>
           </div>
           <div className="mx-auto max-w-5xl px-6">
@@ -40,6 +42,7 @@ export default function App() {
           {active === 'setup' && <SetupTab />}
           {active === 'health' && <HealthCheckTab />}
           {active === 'eval' && <EvalTab />}
+          {active === 'howitworks' && <HowItWorksTab />}
         </main>
       </div>
     </AppProvider>

@@ -1,5 +1,4 @@
 import { useApp } from '../state/AppContext.jsx'
-import { MODELS } from '../interpretation/client.js'
 
 const SPEC_FIELDS = [
   ['baseSalary', 'Base salary', '$'],
@@ -28,20 +27,7 @@ function NumberField({ label, unit, value, onChange }) {
 }
 
 export default function SetupTab() {
-  const {
-    planSpec,
-    roster,
-    model,
-    apiKey,
-    hasKey,
-    setPlanSpec,
-    setRoster,
-    setModel,
-    setApiKey,
-    clearApiKey,
-    resetToDemo,
-    hasProxy,
-  } = useApp()
+  const { planSpec, roster, setPlanSpec, setRoster, resetToDemo } = useApp()
 
   const updateRep = (i, key, val) => {
     const next = roster.map((r, idx) => (idx === i ? { ...r, [key]: val } : r))
@@ -53,54 +39,6 @@ export default function SetupTab() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-8">
-      <section>
-        <div className="mb-3">
-          <h2 className="text-lg font-semibold">Interpretation (optional)</h2>
-          <p className="text-sm text-muted">
-            {hasProxy
-              ? 'Interpretation is enabled via a hosted proxy — no key needed. You can optionally paste your own key to use it instead (held in memory only, sent only to api.anthropic.com).'
-              : 'Detection and eval run without a key. Add an Anthropic API key to unlock the LLM interpretation layer. The key is held in memory only — never saved, never sent anywhere except api.anthropic.com.'}
-          </p>
-        </div>
-        <div className="grid gap-3 rounded-lg border border-edge bg-panel p-4 sm:grid-cols-[1fr_auto]">
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-muted">Anthropic API key</span>
-            <div className="flex gap-2">
-              <input
-                type="password"
-                autoComplete="off"
-                placeholder="sk-ant-…"
-                className="flex-1 rounded-md border border-edge bg-ink px-2 py-1.5 text-sm outline-none focus:border-accent"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-              />
-              {hasKey && (
-                <button
-                  onClick={clearApiKey}
-                  className="rounded-md border border-edge px-3 py-1.5 text-sm text-muted hover:border-off hover:text-off"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-muted">Model</span>
-            <select
-              className="rounded-md border border-edge bg-ink px-2 py-1.5 text-sm outline-none focus:border-accent"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-            >
-              {MODELS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-      </section>
-
       <section>
         <div className="mb-3 flex items-center justify-between">
           <div>

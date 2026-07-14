@@ -36,7 +36,7 @@ function InterpretBar() {
 }
 
 export default function HealthCheckTab() {
-  const { results, interpretation } = useApp()
+  const { results, interpretation, roster } = useApp()
 
   // Only surface LLM content when it passed the hard gates.
   const interp =
@@ -60,7 +60,7 @@ export default function HealthCheckTab() {
         </div>
       )}
 
-      <ExecutiveSummary results={results} overall={interp?.overall} />
+      <ExecutiveSummary results={results} overall={interp?.overall} repCount={roster.length} />
 
       {GROUPS.map((group) => {
         const inGroup = results.filter((r) => r.category === group)
