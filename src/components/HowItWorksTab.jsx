@@ -1,25 +1,84 @@
-// Engineer-facing internals explainer: the three-layer pipeline and why the boundary
-// between deterministic detection and probabilistic interpretation sits where it does.
+// Engineer-facing internals explainer: an at-a-glance pipeline diagram, then why the
+// boundary between deterministic detection and probabilistic interpretation sits where
+// it does.
 
-function Layer({ tag, tagTone, title, children }) {
+function PipelineDiagram() {
   return (
-    <div className="rounded-xl border border-edge bg-panel p-4">
-      <div className="mb-1 flex items-center gap-2">
-        <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tagTone}`}>
-          {tag}
-        </span>
-        <h4 className="text-sm font-semibold">{title}</h4>
-      </div>
-      <div className="text-sm leading-relaxed text-slate-300">{children}</div>
-    </div>
-  )
-}
+    <div className="overflow-x-auto rounded-xl border border-edge bg-ink/40 p-3">
+      <svg
+        viewBox="0 0 600 378"
+        width="100%"
+        style={{ minWidth: 520 }}
+        role="img"
+        aria-label="CompDrift pipeline: data input to deterministic detection, across the grounding boundary to probabilistic interpretation, to the health-check surface."
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <marker id="arrow" markerWidth="9" markerHeight="9" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#8195b5" />
+          </marker>
+        </defs>
 
-function Arrow({ label }) {
-  return (
-    <div className="flex flex-col items-center py-1 text-muted">
-      <span className="text-lg leading-none">↓</span>
-      {label && <span className="text-[10px] uppercase tracking-wide">{label}</span>}
+        {/* Box 1 — Data input */}
+        <rect x="70" y="14" width="460" height="52" rx="10" fill="#111a2b" stroke="#1f2c44" />
+        <text x="300" y="36" textAnchor="middle" fill="#e6ecf7" fontSize="13" fontWeight="600">
+          Data input
+        </text>
+        <text x="300" y="54" textAnchor="middle" fill="#8195b5" fontSize="10.5">
+          plan spec · sales roster · payout records
+        </text>
+
+        <line x1="300" y1="66" x2="300" y2="90" stroke="#8195b5" strokeWidth="1.5" markerEnd="url(#arrow)" />
+
+        {/* Box 2 — Detection (deterministic) */}
+        <rect x="70" y="92" width="460" height="66" rx="10" fill="#111a2b" stroke="#1f2c44" />
+        <rect x="82" y="102" width="108" height="16" rx="8" fill="#1f2c44" />
+        <text x="136" y="113.5" textAnchor="middle" fill="#8195b5" fontSize="8.5" fontWeight="600" letterSpacing="0.5">
+          TRADITIONAL SW
+        </text>
+        <text x="300" y="135" textAnchor="middle" fill="#e6ecf7" fontSize="12.5" fontWeight="600">
+          Detection engine — 10 deterministic checks
+        </text>
+        <text x="300" y="151" textAnchor="middle" fill="#8195b5" fontSize="10">
+          pure arithmetic · designed vs realized · returns drift objects
+        </text>
+
+        {/* Grounding boundary */}
+        <line x1="46" y1="177" x2="554" y2="177" stroke="#e6a13c" strokeWidth="1.5" strokeDasharray="6 4" />
+        <rect x="128" y="169" width="344" height="16" fill="#0b1220" />
+        <text x="300" y="181" textAnchor="middle" fill="#e6a13c" fontSize="9.5" fontWeight="600" letterSpacing="0.3">
+          GROUNDING BOUNDARY · only structured drift summaries cross
+        </text>
+
+        <line x1="300" y1="158" x2="300" y2="206" stroke="#8195b5" strokeWidth="1.5" markerEnd="url(#arrow)" />
+
+        {/* Box 3 — Interpretation (probabilistic) */}
+        <rect x="70" y="206" width="460" height="80" rx="10" fill="#12203a" stroke="#5b8def" />
+        <rect x="82" y="216" width="120" height="16" rx="8" fill="#1c2e52" />
+        <text x="142" y="227.5" textAnchor="middle" fill="#5b8def" fontSize="8.5" fontWeight="600" letterSpacing="0.5">
+          AI · PROBABILISTIC
+        </text>
+        <text x="300" y="249" textAnchor="middle" fill="#e6ecf7" fontSize="12.5" fontWeight="600">
+          Interpretation engine — single LLM call
+        </text>
+        <text x="300" y="265" textAnchor="middle" fill="#8195b5" fontSize="10">
+          severity ranking · business impact · recommendations
+        </text>
+        <text x="300" y="280" textAnchor="middle" fill="#5b8def" fontSize="9.5" fontWeight="600">
+          never sees the raw roster
+        </text>
+
+        <line x1="300" y1="286" x2="300" y2="310" stroke="#8195b5" strokeWidth="1.5" markerEnd="url(#arrow)" />
+
+        {/* Box 4 — Surface */}
+        <rect x="70" y="312" width="460" height="52" rx="10" fill="#111a2b" stroke="#1f2c44" />
+        <text x="300" y="334" textAnchor="middle" fill="#e6ecf7" fontSize="13" fontWeight="600">
+          Health-check surface
+        </text>
+        <text x="300" y="352" textAnchor="middle" fill="#8195b5" fontSize="10.5">
+          exec summary · check cards · eval gates
+        </text>
+      </svg>
     </div>
   )
 }
@@ -36,29 +95,7 @@ export default function HowItWorksTab() {
         </p>
       </div>
 
-      {/* Pipeline diagram */}
-      <div>
-        <Layer tag="input" tagTone="bg-edge text-muted" title="Data input">
-          Plan spec + sales roster + payout records. Structured, editable in the Setup tab.
-        </Layer>
-        <Arrow />
-        <Layer tag="traditional sw" tagTone="bg-edge text-slate-200" title="Detection engine — 10 deterministic checks">
-          Pure arithmetic: designed value vs realized. Returns structured drift objects. No
-          model involved — being wrong means the math is wrong, which is a testable bug.
-        </Layer>
-        <Arrow label="grounding boundary — only structured drift summaries cross" />
-        <Layer tag="ai / probabilistic" tagTone="bg-accent/20 text-accent" title="Interpretation engine — single batched LLM call">
-          Receives drift summaries + plan intent. <span className="text-slate-100">Never sees the raw roster.</span>{' '}
-          Returns severity ranking, business impact, recommendations. Runs through a hosted
-          key proxy (or your own key); absent a key, this layer simply doesn't render.
-        </Layer>
-        <Arrow />
-        <Layer tag="surface" tagTone="bg-edge text-muted" title="Health-check surface">
-          Executive summary (VP-level) + detailed check cards (ops-level). Visible seam:
-          "detected by rules" / "explained by CompDrift". Eval gates run against every
-          interpretation.
-        </Layer>
-      </div>
+      <PipelineDiagram />
 
       {/* Why the boundaries sit where they do */}
       <section className="space-y-3">
