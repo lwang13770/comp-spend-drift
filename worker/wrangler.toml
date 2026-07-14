@@ -1,0 +1,12 @@
+name = "compdrift-proxy"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+
+# Comma-separated list of origins allowed to call this proxy. Include your GitHub Pages
+# origin (scheme + host only, no path) and localhost for local testing.
+# Edit this before deploying.
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,http://localhost:5174,http://localhost:5175,https://lwang13770.github.io"
+
+# The Anthropic key is NOT set here — it is a secret:
+#   wrangler secret put ANTHROPIC_API_KEY
