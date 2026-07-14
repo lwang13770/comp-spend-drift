@@ -7,7 +7,6 @@ import {
   INTERPRETATION_GATES,
   NAMED_FAILURE_MODES,
   RELEASE_GATE,
-  ECONOMICS,
   POST_DEPLOY_SIGNALS,
   REFERENCE_DATASET,
 } from '../eval/framework.js'
@@ -243,20 +242,6 @@ export default function EvalTab() {
             </div>
           </div>
         </div>
-      </Section>
-
-      {/* Economics */}
-      <Section title="Economics" subtitle="Cost and latency are first-class metrics with budgets, not afterthoughts.">
-        <Table
-          head={['Metric', 'Budget', 'Rationale']}
-          rows={ECONOMICS.map((e) => (
-            <tr key={e.metric} className="bg-ink/40">
-              <td className="px-3 py-2 text-slate-200">{e.metric}</td>
-              <td className="tnum px-3 py-2 font-medium">{e.budget}</td>
-              <td className="px-3 py-2 text-muted">{e.note}</td>
-            </tr>
-          ))}
-        />
       </Section>
 
       {/* Post-deployment signals */}

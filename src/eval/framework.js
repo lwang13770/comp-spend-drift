@@ -57,13 +57,6 @@ export const RELEASE_GATE = {
   ],
 }
 
-export const ECONOMICS = [
-  { metric: 'LLM cost per health check', budget: '< $0.05', note: 'one call, ~1200 in / ~500 out' },
-  { metric: 'Detection latency', budget: '< 50ms', note: 'pure arithmetic on < 100 reps' },
-  { metric: 'Interpretation latency', budget: '< 3s', note: 'single API call' },
-  { metric: 'End-to-end render', budget: '< 4s', note: 'detection immediate, interpretation streams in' },
-]
-
 export const POST_DEPLOY_SIGNALS = [
   ['User overrides a severity ranking', 'Disagreement with interpretation'],
   ['User dismisses a finding', 'False positive or irrelevant check'],
