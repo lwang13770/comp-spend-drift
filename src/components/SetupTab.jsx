@@ -102,7 +102,8 @@ export default function SetupTab() {
           <div>
             <h2 className="text-lg font-semibold">Sales roster</h2>
             <p className="text-sm text-muted">
-              {roster.length} reps. Revenue is derived (quota × attainment).
+              {roster.length} reps. Revenue = quota × attainment; editing revenue adjusts
+              attainment to match.
             </p>
           </div>
           <button
@@ -160,8 +161,18 @@ export default function SetupTab() {
                       onChange={(e) => updateRep(i, 'variablePaid', Number(e.target.value))}
                     />
                   </td>
-                  <td className="px-3 py-1 text-muted">
-                    ${Math.round((r.quota * r.attainment) / 1000).toLocaleString()}K
+                  <td className="px-2 py-1">
+                    <input
+                      type="number"
+                      className="w-28 rounded bg-transparent px-1 py-1 outline-none focus:bg-panel"
+                      value={Math.round(r.quota * r.attainment)}
+                      onChange={(e) => {
+                        // Revenue is derived (quota × attainment); editing it back-solves
+                        // attainment so the invariant holds and the engine stays consistent.
+                        const rev = Number(e.target.value)
+                        updateRep(i, 'attainment', r.quota ? rev / r.quota : 0)
+                      }}
+                    />
                   </td>
                   <td className="px-2 py-1 text-right">
                     <button
